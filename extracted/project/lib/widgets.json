@@ -1,0 +1,34 @@
+{
+  "widgets": [
+    {
+      "id": "notes",
+      "name": "Notes",
+      "type": "utility",
+      "inputType": "none"
+    },
+    {
+      "id": "timer",
+      "name": "Pomodoro Timer",
+      "type": "utility",
+      "inputType": "none"
+    },
+    {
+      "id": "ai-summarize",
+      "name": "AI Summarizer",
+      "type": "ai",
+      "inputType": "text"
+    },
+    {
+      "id": "ai-flashcards",
+      "name": "AI Flashcards",
+      "type": "ai",
+      "inputType": "text"
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube Embed",
+      "type": "embed",
+      "inputType": "url"
+    }
+  ]
+}
