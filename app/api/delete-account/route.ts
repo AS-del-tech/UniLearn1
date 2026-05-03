@@ -9,27 +9,28 @@ export async function DELETE(req: NextRequest) {
 
   const token = authHeader.slice(7);
 
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!serviceKey) {
-    return NextResponse.json({ error: 'Server is not configured for account deletion.' }, { status: 500 });
-  }
-
-  const adminClient = createClient(
+  // Use anon key but pass the user's JWT as the auth header.
+  // This authenticates all calls as that user without needing a service role key.
+  const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    serviceKey,
-    { auth: { autoRefreshToken: false, persistSession: false } }
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      global: { headers: { Authorization: `Bearer ${token}` } },
+      auth: { autoRefreshToken: false, persistSession: false },
+    }
   );
 
-  // Verify token and get user identity
-  const { data: { user }, error: authError } = await adminClient.auth.getUser(token);
+  // Verify the session is valid
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) {
     return NextResponse.json({ error: 'Invalid or expired session.' }, { status: 401 });
   }
 
-  // Delete the user
-  const { error: deleteError } = await adminClient.auth.admin.deleteUser(user.id);
-  if (deleteError) {
-    console.error('Delete user error:', deleteError);
+  // Call the delete_user() SQL function (SECURITY DEFINER, deletes auth.uid() only).
+  // This function must exist in your Supabase project — see the migration file.
+  const { error } = await supabase.rpc('delete_user');
+  if (error) {
+    console.error('Delete user error:', error);
     return NextResponse.json({ error: 'Failed to delete account. Please try again.' }, { status: 500 });
   }
 
