@@ -1,0 +1,149 @@
+Upgrade the UniLearn UI and add an AI chat feature.
+
+---
+
+## 🎯 Goal
+
+Make the UI look like a **modern SaaS landing/dashboard**, similar in layout and feel to the provided reference (clean hero section, strong typography, soft gradients), but with a **custom theme**.
+
+---
+
+## 🎨 Theme (IMPORTANT — follow exactly)
+
+### Colors
+
+* Background: `#F7F7FB` (light gray)
+* Primary gradient: `#4F46E5 → #7C3AED` (blue → purple)
+* Accent gradient: `#F97316 → #EC4899` (orange → pink)
+* Text:
+
+  * Primary: `#111827`
+  * Secondary: `#6B7280`
+
+---
+
+## 🧱 Layout Changes
+
+### Hero Section (Top)
+
+* Large bold heading:
+
+  * Example: “Your Personal Learning Hub”
+  * Apply gradient text on key words
+* Subheading:
+
+  * softer gray text
+* Add a pill/badge above heading (like “AI-powered”)
+
+---
+
+### Input Section
+
+* Large rounded input field
+* Prominent action button (gradient background)
+* Clean spacing and alignment
+
+---
+
+### Buttons
+
+* Rounded (full or xl)
+* Primary = gradient
+* Secondary = subtle outline
+
+---
+
+### Cards / Widgets
+
+* White background
+* Rounded-2xl
+* Soft shadow
+* Hover effect:
+
+  * slight lift
+  * stronger shadow
+
+---
+
+### Background Details
+
+* Add subtle floating icons or shapes (low opacity)
+* Keep it minimal and clean
+
+---
+
+## 💬 AI Chat Feature (NEW)
+
+### Floating Chat Button
+
+* Add circular button in bottom-right corner
+* Use accent gradient
+* Icon: chat/message
+
+---
+
+### Chat Panel
+
+* Opens when button clicked
+* Fixed position (bottom corner)
+* Contains:
+
+  * message list
+  * input box
+  * send button
+
+---
+
+### Chat Functionality
+
+Create API route:
+
+* `/api/chat`
+
+Behavior:
+
+* Accept user message
+* Send to OpenAI API
+* Return AI response
+
+---
+
+### Frontend Chat Behavior
+
+* User sends message
+* Show loading state
+* Display AI response in chat
+* Maintain conversation history (state)
+
+---
+
+## 🔐 Safety
+
+* Store OpenAI API key in `.env`
+* Do NOT expose it to frontend
+* Validate inputs
+* Add basic rate limiting
+
+---
+
+## ⚠️ Constraints
+
+* DO NOT break existing widget system
+* DO NOT rewrite entire app
+* Keep everything modular
+* Keep UI clean (not cluttered)
+
+---
+
+## 🎯 Outcome
+
+The app should feel:
+
+* modern and premium
+* clean and spacious
+* visually engaging
+* interactive (with AI chat)
+
+---
+
+Implement changes incrementally and keep code clean.
