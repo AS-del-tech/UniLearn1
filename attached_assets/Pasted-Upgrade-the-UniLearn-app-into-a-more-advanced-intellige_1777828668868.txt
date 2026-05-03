@@ -1,0 +1,282 @@
+Upgrade the UniLearn app into a more advanced, intelligent study platform.
+
+---
+
+# ⚠️ IMPORTANT INSTRUCTIONS
+
+* Implement features **incrementally**
+* Do NOT rewrite the entire app
+* Preserve existing architecture (widgets, StudyBuddy, auth)
+* Keep code modular and clean
+* Focus on MVP-level implementations (no overengineering)
+
+---
+
+# 🎯 GOAL
+
+Transform UniLearn from a tool dashboard into a **smart, unified study system** centered around StudyBuddy.
+
+---
+
+# 🧠 CORE CHANGE: STUDYBUDDY UNIFICATION
+
+Replace multiple AI tools with a single **StudyBuddy assistant**.
+
+### Behavior:
+
+* On open:
+  “Hi, I’m StudyBuddy, your personal learning assistant. I can help you study, quiz you, summarize, and explain concepts.”
+
+---
+
+## Features:
+
+### 1. Multi-function AI
+
+StudyBuddy must handle:
+
+* summarizing
+* generating flashcards
+* creating quizzes
+* explaining concepts
+
+---
+
+### 2. Quick Action Suggestions
+
+Show suggestion chips:
+
+* “Summarize notes”
+* “Quiz me”
+* “Explain simply”
+
+---
+
+### 3. Context Awareness
+
+Use:
+
+* notes content
+* last AI output
+* active widget
+
+---
+
+# 🧩 UI/UX CHANGES
+
+## Expandable Widgets
+
+* Widgets are compact by default
+* Expand when clicked
+* Show preview when collapsed
+
+---
+
+## Timer (Bottom Bar)
+
+* Sticky bottom bar
+* Customizable duration
+* Start/pause/reset globally
+
+---
+
+## Focus Mode
+
+* Hide distractions
+* Show only:
+
+  * notes
+  * StudyBuddy
+  * timer
+
+---
+
+# 📊 ENGAGEMENT FEATURES
+
+## Streaks
+
+* Track daily study sessions
+* Display simple streak indicator
+* Keep minimal (no over-gamification)
+
+---
+
+# 🧠 INTELLIGENCE FEATURES
+
+## 4. Weakness Detector
+
+* Based on quiz results or interactions
+* Identify weak topics
+* Store per user
+* Show:
+  “You need to review X”
+
+---
+
+## 5. Smart Reminders
+
+* Suggest:
+
+  * review after time gap
+  * continue sessions
+* Keep non-intrusive
+
+---
+
+## 6. Universal Input Box
+
+Add a global input at top:
+
+User can paste:
+
+* text
+* links
+* questions
+
+StudyBuddy decides:
+
+* summarize
+* explain
+* generate flashcards
+
+---
+
+# 💬 AI CHAT IMPROVEMENTS
+
+* Maintain conversation history
+* Use context-aware system
+* Format responses clearly
+* Keep responses concise
+
+---
+
+# 🎨 CUSTOMIZATION
+
+## StudyBuddy Customization
+
+Allow user to:
+
+* rename StudyBuddy
+* choose tone:
+
+  * friendly
+  * formal
+  * concise
+
+Store preferences per user
+
+---
+
+# 💾 DATA PERSISTENCE (IMPORTANT)
+
+If user is signed in:
+
+Persist:
+
+* notes
+* flashcards
+* chat history
+* streaks
+* weak topics
+* StudyBuddy preferences
+
+Use database (Supabase or existing backend)
+
+If not signed in:
+
+* fallback to localStorage
+
+---
+
+# 📚 FLASHCARDS SYSTEM
+
+* Save generated flashcards
+* Allow review later
+* Associate with topics
+
+---
+
+# 🔗 EXPORT + IMPORT (IMPORTANT)
+
+## Export
+
+Allow user to export:
+
+* notes
+* flashcards
+* study data
+
+Formats:
+
+* JSON (required)
+* optional: text
+
+---
+
+## Import
+
+Allow user to:
+
+* upload JSON
+* restore data into app
+
+Validate data before importing
+
+---
+
+# 🔌 CANVA WIDGET (LIGHT INTEGRATION)
+
+* Add simple Canva widget:
+
+  * button: “Open Canva”
+  * optional embed preview
+* Do NOT attempt deep integration
+
+---
+
+# 🔄 CROSS-WIDGET INTELLIGENCE
+
+Examples:
+
+* Notes → “Generate quiz”
+* YouTube → “Summarize video”
+* Flashcards → “Review weak ones”
+
+---
+
+# 🧱 STRUCTURE REQUIREMENTS
+
+* Keep widget system intact
+* Extend StudyBuddy instead of adding new AI tools
+* Keep API routes modular
+
+---
+
+# 🔐 SECURITY
+
+* Protect all APIs
+* Validate inputs
+* Keep API keys server-side
+
+---
+
+# ⚠️ CONSTRAINTS
+
+* Do NOT overengineer (no complex ML systems)
+* Do NOT add unnecessary features
+* Keep everything MVP-level but functional
+
+---
+
+# 🎯 FINAL OUTCOME
+
+The app should feel like:
+
+* a **smart study assistant**
+* not just a collection of tools
+* personalized and interactive
+* clean and focused
+
+---
+
+Implement in logical steps and ensure each feature works before moving on.
