@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FileText } from 'lucide-react';
 
 const STORAGE_KEY = 'unilearn-notes';

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import WidgetRenderer from '@/components/WidgetRenderer';
 import Header from '@/components/Header';
 import widgetsData from '@/lib/widgets.json';
@@ -11,9 +12,23 @@ interface Widget {
   inputType: 'text' | 'url' | 'none';
 }
 
-const widgets = widgetsData.widgets as Widget[];
-
 export default function Dashboard() {
+  const [widgets, setWidgets] = useState<Widget[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setWidgets(widgetsData.widgets as Widget[]);
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
