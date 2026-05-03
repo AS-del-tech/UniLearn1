@@ -1,0 +1,149 @@
+You are helping build a web app called **UniLearn**.
+
+## 🧠 Core Idea
+
+UniLearn is a **minimal, modular study dashboard** where users can access essential study tools in one place (notes, AI tools, timer, YouTube, etc.).
+
+The goal is NOT to recreate full apps, but to act as a **central hub** that combines functionality using APIs and simple widgets.
+
+---
+
+## 🎯 Product Philosophy
+
+* Fast and distraction-free (like a “focus mode”)
+* Minimal UI (dark mode, clean layout)
+* Modular architecture (widgets can be added/removed)
+* Built as an MVP first, not a full platform
+
+---
+
+## 🧩 Core Architecture
+
+### 1. Widget System
+
+The app is built around a **widget registry system**.
+
+* Widgets are defined in a JSON file (`lib/widgets.json`)
+* Each widget has:
+
+  * id
+  * name
+  * type (ai, embed, utility)
+  * inputType (text, url, none)
+  * endpoint (optional)
+
+The frontend dynamically renders widgets based on this registry.
+
+---
+
+### 2. Widget Types
+
+#### Utility
+
+* Notes (text editor with local storage)
+* Timer (Pomodoro-style)
+
+#### AI
+
+* Text input
+* Actions:
+
+  * Summarize
+  * Generate Flashcards
+* Calls backend API routes
+
+#### Embed
+
+* YouTube video via URL (iframe)
+
+---
+
+## ⚙️ Backend
+
+Using Next.js API routes.
+
+Current endpoints:
+
+* `/api/ai/summarize`
+* `/api/ai/flashcards`
+
+These:
+
+* accept text input
+* call OpenAI API
+* return structured output
+
+---
+
+## 🔐 Safety Requirements
+
+* API keys must be stored in environment variables
+* API calls must happen ONLY on the backend
+* Input must be validated (max length ~2000 chars)
+* Basic rate limiting should be implemented
+
+---
+
+## 🔧 Admin System
+
+There is a simple admin panel:
+
+* Route: `/admin`
+* Protected by a basic password (`ADMIN_PASS`)
+* Allows:
+
+  * adding/editing widgets in the registry
+
+Constraints:
+
+* Admin cannot create new backend logic
+* Admin cannot execute arbitrary APIs
+* Only config-based changes allowed
+
+---
+
+## 🎨 UI/UX
+
+* Built with Next.js + Tailwind CSS
+* Dark mode
+* Grid-based dashboard
+* Responsive:
+
+  * Desktop: multi-column grid
+  * Mobile: stacked layout
+
+---
+
+## 🚀 Current Goal
+
+We are continuing development of an MVP.
+
+Priorities:
+
+1. Clean, working functionality
+2. Maintainable structure
+3. Avoid overengineering
+
+---
+
+## ⚠️ Important Constraints
+
+* Do NOT rewrite the entire app unless asked
+* Do NOT add unnecessary features
+* Follow existing architecture
+* Keep everything simple and modular
+
+---
+
+## 🧠 Your Role
+
+Act as a senior developer helping extend and refine this app.
+
+* Follow the architecture
+* Make incremental improvements
+* Keep code clean and consistent
+* Ask for clarification if needed
+
+---
+
+Confirm understanding before making changes.
