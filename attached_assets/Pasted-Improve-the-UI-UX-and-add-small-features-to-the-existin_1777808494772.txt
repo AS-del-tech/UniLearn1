@@ -1,0 +1,159 @@
+Improve the UI/UX and add small features to the existing UniLearn app.
+
+## 🎯 Goals
+
+1. Make the UI **light-themed, vibrant, and polished**, inspired by Canva’s layout style (not its colors).
+2. Add a **user feedback feature** that admins can read.
+3. Make the **admin password configurable via environment variable**, not hardcoded.
+
+---
+
+## 🎨 Visual Direction (LIGHT THEME)
+
+### Background
+
+* Use a **light background** (off-white or very light gray, not pure white)
+* Add subtle gradients or soft color tints (very low opacity)
+
+### Color System
+
+* Use a **fresh, vibrant palette**:
+
+  * Primary: blue/purple gradient
+  * Secondary: teal or coral accent
+  * Neutral: light grays for surfaces
+* Avoid Canva’s exact colors
+
+---
+
+### Cards (Widgets)
+
+* Keep card-based layout
+* Style:
+
+  * rounded-2xl corners
+  * soft shadows (shadow-md / shadow-lg)
+  * white or slightly tinted backgrounds
+* Add subtle hover:
+
+  * lift (translateY)
+  * shadow increase
+
+---
+
+### Layout & Spacing
+
+* Keep grid system
+* Increase spacing (gap-4 → gap-6 or gap-8)
+* Add generous padding inside cards
+* Make layout feel airy and breathable
+
+---
+
+### Typography
+
+* Clean, modern
+* Strong hierarchy:
+
+  * widget titles → bold
+  * body text → softer gray
+* Improve readability on light background
+
+---
+
+### Buttons & Inputs
+
+* Rounded buttons
+* Primary buttons use accent color or gradient
+* Add hover + active states
+* Inputs:
+
+  * light background
+  * subtle border
+  * colored focus ring
+
+---
+
+### Micro-interactions
+
+* Smooth transitions (150–250ms)
+* Subtle hover animations
+* No heavy animations
+
+---
+
+## 💬 Feedback Feature
+
+### Frontend
+
+* Add a **Feedback widget or button**
+* Opens a small form:
+
+  * message (required)
+  * optional email or name
+* Submit button
+
+---
+
+### Backend
+
+Create API route:
+
+* `/api/feedback`
+
+Behavior:
+
+* Accept POST request with feedback data
+* Validate input
+* Store feedback:
+
+  * simplest: JSON file or in-memory store (MVP)
+  * or lightweight DB if already used
+
+---
+
+### Admin Panel
+
+* Add a **Feedback section**
+* Display list of feedback entries:
+
+  * message
+  * timestamp
+  * optional user info
+* Simple readable layout (no need for complex features)
+
+---
+
+## 🔐 Admin Password (IMPORTANT)
+
+* Remove hardcoded password
+* Use environment variable:
+
+  * `ADMIN_PASS`
+* Validate admin login against this value
+* Do NOT expose it to frontend
+
+---
+
+## ⚠️ Constraints
+
+* DO NOT change core app logic
+* DO NOT break widget system
+* Keep implementation simple (MVP level)
+* Do not overengineer storage or auth
+
+---
+
+## 🎯 Outcome
+
+The app should:
+
+* feel **bright, modern, and premium**
+* have a **clean light UI**
+* allow users to submit feedback
+* allow admin to read feedback
+* have a **secure, configurable admin password**
+
+---
+
+Make changes incrementally and keep code clean.

@@ -29,6 +29,12 @@
       "name": "YouTube Embed",
       "type": "embed",
       "inputType": "url"
+    },
+    {
+      "id": "feedback",
+      "name": "Feedback",
+      "type": "utility",
+      "inputType": "none"
     }
   ]
 }
