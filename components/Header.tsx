@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuth } from './AuthProvider';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronDown, LogOut, Trash2, User, Flame, Eye, EyeOff } from 'lucide-react';
+import { ChevronDown, LogOut, Trash2, User, Flame, X } from 'lucide-react';
 import { getStreakCount } from '@/lib/streak';
 import { getFlashcards } from '@/lib/flashcards';
 
@@ -23,7 +23,6 @@ export default function Header({ focusMode, onToggleFocus }: HeaderProps) {
   const [deleteError, setDeleteError] = useState('');
   const [importMsg, setImportMsg] = useState('');
   const [streak, setStreak] = useState(0);
-  const [showAdminPass, setShowAdminPass] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 

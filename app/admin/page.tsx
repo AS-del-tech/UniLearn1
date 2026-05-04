@@ -50,25 +50,11 @@ export default function AdminPage() {
   const [feedbackError, setFeedbackError] = useState('');
   const [feedbackLoaded, setFeedbackLoaded] = useState(false);
 
-  useEffect(() => {
-    const savedPass = process.env.ADMIN_PASS;
-    if (savedPass && password === savedPass) setAuthed(true);
-  }, [password]);
-
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setAuthLoading(true);
     setAuthError('');
     try {
-      const adminPass = process.env.NEXT_PUBLIC_ADMIN_PASS ?? process.env.ADMIN_PASS ?? '';
-      if (!adminPass) {
-        setAuthError('Admin password is not configured.');
-        return;
-      }
-      if (password !== adminPass) {
-        setAuthError('Incorrect password.');
-        return;
-      }
       const res = await fetch('/api/admin/widgets', {
         headers: { 'x-admin-password': password },
       });

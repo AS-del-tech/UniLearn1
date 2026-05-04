@@ -1,7 +1,7 @@
 # UniLearn — Smart Study Dashboard
 
 ## Overview
-A Next.js 13 App Router study platform with AI-powered widgets, StudyBuddy AI assistant, timer, streaks, flashcards, focus mode, export/import, and Supabase auth.
+A Next.js 13 App Router study platform with AI-powered widgets, StudyBuddy AI assistant, stopwatch + XP/level system, streaks, flashcards, focus mode, export/import, and Supabase auth.
 
 ## Tech Stack
 - **Framework**: Next.js 13.5 (App Router)
@@ -14,13 +14,14 @@ A Next.js 13 App Router study platform with AI-powered widgets, StudyBuddy AI as
 ## Project Structure
 ```
 app/                  - Next.js App Router pages (layout, page, globals.css, api/)
+  admin/page.tsx      - Admin panel: widget manager + feedback viewer, password show/hide toggle
 components/           - React components
-  StudyBuddy.tsx      - Floating AI chat, settings panel, flashcard save detection
+  StudyBuddy.tsx      - Floating AI chat, outside-click close, "thinking…" indicator, flashcard save
   WidgetRenderer.tsx  - Renders widgets by id, supports focusMode prop
   WidgetShell.tsx     - Expandable/collapsible wrapper for all widgets
   FlashcardDeck.tsx   - Flip-card review widget reading from localStorage
-  Header.tsx          - Streak badge, Focus Mode toggle, Export/Import modal, auth menu
-  TimerBar.tsx        - Sticky bottom Pomodoro timer (5/15/25/50m presets)
+  Header.tsx          - Subtitle "All-in-one study platform", streak badge, Focus/Export, auth menu
+  TimerBar.tsx        - Sticky bottom stopwatch + XP/level bar (persists in localStorage)
   NotesWidget.tsx     - Auto-saving notes textarea
   FeedbackWidget.tsx  - Feedback submission form
   UniversalInput.tsx  - Hero search bar that fires studybuddy:open event
@@ -34,21 +35,36 @@ supabase/migrations/  - delete_user() SECURITY DEFINER RPC
 ```
 
 ## Features (all complete)
-1. **StudyBuddy** — Floating orange chat button, quick-action chips, notes context, tone styles
+1. **StudyBuddy** — Floating orange chat button; closes on outside click; "StudyBuddy is thinking…" typing indicator with bounce dots; quick-action chips; notes context; tone styles; gear settings panel
 2. **Universal Input** — Global search/paste bar that prefills StudyBuddy
 3. **Expandable Widgets** — WidgetShell with collapse/expand on every widget
-4. **Timer Bar** — Sticky bottom Pomodoro bar with 5/15/25/50m presets; records streak
+4. **Stopwatch + XP/Level** — Sticky bottom stopwatch; earns ~1 XP/2 min; 4 levels (0/100/250/500 XP); level-up toast; XP persists in `localStorage['unilearn-xp']`
 5. **Streaks** — Daily study session tracking, flame badge in header
 6. **Flashcard Deck** — Save Q/A pairs from StudyBuddy; flip-card review with nav + delete
 7. **Export / Import** — Download JSON (notes + flashcards + study dates); import with validation
 8. **Focus Mode** — Header toggle hides YouTube, Canva, Feedback; keeps Notes + Flashcard Deck
-9. **StudyBuddy Customization** — Gear icon → settings panel: rename + tone (Friendly/Formal/Concise)
+9. **StudyBuddy Customization** — Rename + tone (Friendly/Formal/Concise)
 10. **Canva Widget** — Opens canva.com in new tab for visual study materials
+11. **Admin Panel** — Password field with Eye/EyeOff show/hide toggle; widget CRUD; feedback viewer
+
+## UI Polish
+- All interactive elements use `transition-all duration-200` (150–250 ms)
+- Hover: `hover:scale-[0.98]`, Active: `active:scale-95` on buttons
+- Widget cards: `hover:shadow-md hover:-translate-y-0.5`
+- Header subtitle: "All-in-one study platform"
 
 ## Design Tokens
 - Background: `#F7F7FB`
 - Primary gradient: `#4F46E5 → #7C3AED`
 - Accent gradient: `#F97316 → #EC4899`
+
+## localStorage Keys
+- `unilearn-notes` — notes content
+- `unilearn-flashcards` — flashcard array
+- `unilearn-study-dates` — streak date array
+- `studybuddy-name` — AI assistant name
+- `studybuddy-tone` — AI tone preference
+- `unilearn-xp` — XP points for level system
 
 ## Custom Events
 - `studybuddy:open` — `{ text: string }` — opens StudyBuddy + prefills input
@@ -62,4 +78,4 @@ supabase/migrations/  - delete_user() SECURITY DEFINER RPC
 - `NEXT_PUBLIC_SUPABASE_URL` — Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase anonymous key
 - `OPENAI_API_KEY` — OpenAI API key (secret)
-- `ADMIN_PASS` — Admin panel password (default: admin123)
+- `ADMIN_PASS` — Admin panel password (validated server-side via `/api/admin/widgets`)
