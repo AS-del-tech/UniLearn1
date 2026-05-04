@@ -1,0 +1,119 @@
+Upgrade the UniLearn app with UI polish, StudyBuddy improvements, engagement features, and admin fixes. Keep changes modular and do NOT rewrite the app.
+
+---
+
+## 🎯 UI + LAYOUT
+
+* Use consistent card design:
+
+  * all widgets = equal size/shape (rounded, soft shadow)
+  * collapsed = compact square cards
+  * expanded = full view
+
+* Improve spacing + alignment across dashboard
+
+* Replace header text:
+  “Your smart study platform” → “All-in-one study platform” (or similar)
+
+---
+
+## 💬 STUDYBUDDY (CHAT)
+
+* Move floating button slightly **above bottom bar** (no overlap)
+
+* Chat panel:
+
+  * scrollable messages
+  * input fixed at bottom
+  * closes when clicking outside
+
+* Add:
+
+  * typing indicator (“StudyBuddy is thinking…”)
+  * message fade-in animation
+
+---
+
+## ⏱️ STOPWATCH (REPLACE TIMER)
+
+* Remove Pomodoro timer
+* Add stopwatch:
+
+  * start / pause / reset
+  * mm:ss or hh:mm:ss
+* Place in bottom sticky bar
+
+---
+
+## 🎮 XP + LEVEL SYSTEM
+
+* Gain XP from stopwatch (e.g. ~1 XP per 1–2 minutes)
+* XP persists (no loss on pause)
+
+### Levels:
+
+* Level 1: 0 XP
+* Level 2: 100 XP
+* Level 3: 250 XP
+* Level 4: 500 XP (simple increasing pattern)
+
+### UI:
+
+* XP bar (animated fill)
+* show level + progress to next level
+
+### Feedback:
+
+* small toast on level up:
+  “Level up! You reached Level X 🎉”
+
+---
+
+## 🛡️ ADMIN IMPROVEMENTS
+
+* Remove hardcoded password
+
+* Use env variable: `ADMIN_PASS`
+
+* Add password input:
+
+  * show/hide toggle (eye icon)
+  * default hidden
+
+---
+
+## ✨ ANIMATIONS (SUBTLE)
+
+* Add 150–250ms transitions globally
+
+### Cards:
+
+* hover → slight lift + stronger shadow
+
+### Buttons:
+
+* hover + press (scale down slightly)
+
+### XP bar:
+
+* smooth fill animation (+ optional subtle glow)
+
+---
+
+## ⚠️ CONSTRAINTS
+
+* Do NOT break widget system
+* Do NOT change backend unnecessarily
+* Keep everything lightweight (MVP level)
+* No overengineering
+
+---
+
+## 🎯 RESULT
+
+App should feel:
+
+* clean and consistent
+* smooth and responsive
+* slightly gamified (XP/levels)
+* more polished and usable

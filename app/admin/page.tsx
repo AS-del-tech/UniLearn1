@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react';
 
 type WidgetType = 'ai' | 'embed' | 'utility';
 type InputType = 'text' | 'url' | 'none';
@@ -30,10 +31,10 @@ export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [activeTab, setActiveTab] = useState<Tab>('widgets');
 
-  // Widgets state
   const [widgets, setWidgets] = useState<Widget[]>([]);
   const [saveError, setSaveError] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -44,17 +45,30 @@ export default function AdminPage() {
   const [addForm, setAddForm] = useState<Widget>({ ...EMPTY_WIDGET });
   const [addError, setAddError] = useState('');
 
-  // Feedback state
   const [feedback, setFeedback] = useState<FeedbackEntry[]>([]);
   const [feedbackLoading, setFeedbackLoading] = useState(false);
   const [feedbackError, setFeedbackError] = useState('');
   const [feedbackLoaded, setFeedbackLoaded] = useState(false);
+
+  useEffect(() => {
+    const savedPass = process.env.ADMIN_PASS;
+    if (savedPass && password === savedPass) setAuthed(true);
+  }, [password]);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setAuthLoading(true);
     setAuthError('');
     try {
+      const adminPass = process.env.NEXT_PUBLIC_ADMIN_PASS ?? process.env.ADMIN_PASS ?? '';
+      if (!adminPass) {
+        setAuthError('Admin password is not configured.');
+        return;
+      }
+      if (password !== adminPass) {
+        setAuthError('Incorrect password.');
+        return;
+      }
       const res = await fetch('/api/admin/widgets', {
         headers: { 'x-admin-password': password },
       });
@@ -143,8 +157,8 @@ export default function AdminPage() {
     if (ok) { setShowAddForm(false); setAddForm({ ...EMPTY_WIDGET }); setAddError(''); }
   }
 
-  const inputClass = "w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm text-foreground placeholder-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition-all";
-  const selectClass = "w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-all";
+  const inputClass = 'w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm text-foreground placeholder-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition-all duration-200';
+  const selectClass = 'w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-all duration-200';
 
   if (!authed) {
     return (
@@ -153,19 +167,24 @@ export default function AdminPage() {
           <h1 className="text-xl font-bold text-foreground mb-1">Admin Panel</h1>
           <p className="text-sm text-muted-foreground mb-6">Enter the admin password to continue.</p>
           <form onSubmit={handleLogin} className="space-y-3">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              autoFocus
-              className={inputClass}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                autoFocus
+                className={inputClass}
+              />
+              <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors">
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
             {authError && <p className="text-sm text-destructive">{authError}</p>}
             <button
               type="submit"
               disabled={authLoading || !password}
-              className="w-full px-3 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl text-sm font-medium hover:from-indigo-600 hover:to-purple-600 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-3 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl text-sm font-medium hover:from-indigo-600 hover:to-purple-600 transition-all duration-200 hover:scale-[0.98] active:scale-95 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {authLoading ? 'Checking...' : 'Login'}
             </button>
@@ -185,47 +204,35 @@ export default function AdminPage() {
       <header className="bg-white/80 backdrop-blur-sm border-b border-border shadow-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Admin Panel
-            </h1>
+            <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Admin Panel</h1>
             <p className="text-xs text-muted-foreground mt-0.5">Manage widget configuration</p>
           </div>
-          <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-secondary">
+          <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-secondary duration-200">
             Back to dashboard
           </Link>
         </div>
       </header>
 
       <main className="max-w-3xl mx-auto px-6 py-8 space-y-6">
-        {/* Tabs */}
         <div className="flex gap-1 bg-slate-100 rounded-xl p-1 w-fit">
           {(['widgets', 'feedback'] as Tab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
-              className={`px-5 py-2 rounded-lg text-sm font-medium capitalize transition-all ${
-                activeTab === tab
-                  ? 'bg-white text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className={`px-5 py-2 rounded-lg text-sm font-medium capitalize transition-all duration-200 hover:scale-[0.98] active:scale-95 ${activeTab === tab ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
             >
               {tab}
             </button>
           ))}
         </div>
 
-        {saveError && (
-          <div className="text-sm text-destructive bg-red-50 border border-red-200 rounded-xl px-4 py-3">{saveError}</div>
-        )}
-        {saveSuccess && (
-          <div className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">Widgets saved successfully.</div>
-        )}
+        {saveError && <div className="text-sm text-destructive bg-red-50 border border-red-200 rounded-xl px-4 py-3">{saveError}</div>}
+        {saveSuccess && <div className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">Widgets saved successfully.</div>}
 
-        {/* Widgets Tab */}
         {activeTab === 'widgets' && (
           <div className="space-y-3">
             {widgets.map((widget) => (
-              <div key={widget.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <div key={widget.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
                 {editingId === widget.id ? (
                   <form onSubmit={handleSaveEdit} className="space-y-3">
                     <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wide mb-3">Editing: {widget.id}</p>
@@ -256,10 +263,10 @@ export default function AdminPage() {
                       </div>
                     </div>
                     <div className="flex gap-2 pt-1">
-                      <button type="submit" disabled={saving} className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl text-sm font-medium hover:from-indigo-600 hover:to-purple-600 transition-all shadow-sm disabled:opacity-50">
+                      <button type="submit" disabled={saving} className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl text-sm font-medium hover:from-indigo-600 hover:to-purple-600 transition-all duration-200 hover:scale-[0.98] active:scale-95 shadow-sm disabled:opacity-50">
                         {saving ? 'Saving...' : 'Save'}
                       </button>
-                      <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm text-foreground hover:bg-slate-200 transition-all">
+                      <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm text-foreground hover:bg-slate-200 transition-all duration-200 hover:scale-[0.98] active:scale-95">
                         Cancel
                       </button>
                     </div>
@@ -278,8 +285,8 @@ export default function AdminPage() {
                       </p>
                     </div>
                     <div className="flex gap-2 shrink-0">
-                      <button onClick={() => { setEditingId(widget.id); setEditForm({ ...widget, endpoint: widget.endpoint ?? '' }); setShowAddForm(false); }} className="px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs text-foreground hover:bg-slate-200 transition-all">Edit</button>
-                      <button onClick={() => handleDelete(widget.id)} className="px-3 py-1.5 bg-red-50 border border-red-200 rounded-xl text-xs text-destructive hover:bg-red-100 transition-all">Delete</button>
+                      <button onClick={() => { setEditingId(widget.id); setEditForm({ ...widget, endpoint: widget.endpoint ?? '' }); setShowAddForm(false); }} className="px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs text-foreground hover:bg-slate-200 transition-all duration-200 hover:scale-[0.98] active:scale-95">Edit</button>
+                      <button onClick={() => handleDelete(widget.id)} className="px-3 py-1.5 bg-red-50 border border-red-200 rounded-xl text-xs text-destructive hover:bg-red-100 transition-all duration-200 hover:scale-[0.98] active:scale-95">Delete</button>
                     </div>
                   </div>
                 )}
@@ -287,7 +294,7 @@ export default function AdminPage() {
             ))}
 
             {showAddForm ? (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
                 <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wide mb-3">New Widget</p>
                 <form onSubmit={handleAdd} className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
@@ -323,47 +330,36 @@ export default function AdminPage() {
                   </div>
                   {addError && <p className="text-sm text-destructive">{addError}</p>}
                   <div className="flex gap-2 pt-1">
-                    <button type="submit" disabled={saving} className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl text-sm font-medium hover:from-indigo-600 hover:to-purple-600 transition-all shadow-sm disabled:opacity-50">
+                    <button type="submit" disabled={saving} className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl text-sm font-medium hover:from-indigo-600 hover:to-purple-600 transition-all duration-200 hover:scale-[0.98] active:scale-95 shadow-sm disabled:opacity-50">
                       {saving ? 'Adding...' : 'Add Widget'}
                     </button>
-                    <button type="button" onClick={() => { setShowAddForm(false); setAddForm({ ...EMPTY_WIDGET }); setAddError(''); }} className="px-4 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm text-foreground hover:bg-slate-200 transition-all">
+                    <button type="button" onClick={() => { setShowAddForm(false); setAddForm({ ...EMPTY_WIDGET }); setAddError(''); }} className="px-4 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm text-foreground hover:bg-slate-200 transition-all duration-200 hover:scale-[0.98] active:scale-95">
                       Cancel
                     </button>
                   </div>
                 </form>
               </div>
             ) : (
-              <button onClick={() => { setShowAddForm(true); setEditingId(null); }} className="w-full px-4 py-3 bg-white border-2 border-dashed border-slate-200 rounded-2xl text-sm text-muted-foreground hover:text-foreground hover:border-indigo-300 transition-all">
+              <button onClick={() => { setShowAddForm(true); setEditingId(null); }} className="w-full px-4 py-3 bg-white border-2 border-dashed border-slate-200 rounded-2xl text-sm text-muted-foreground hover:text-foreground hover:border-indigo-300 transition-all duration-200 hover:scale-[0.98] active:scale-95">
                 + Add widget
               </button>
             )}
           </div>
         )}
 
-        {/* Feedback Tab */}
         {activeTab === 'feedback' && (
           <div className="space-y-3">
-            {feedbackLoading && (
-              <div className="text-sm text-muted-foreground text-center py-8 animate-pulse">Loading feedback...</div>
-            )}
-            {feedbackError && (
-              <div className="text-sm text-destructive bg-red-50 border border-red-200 rounded-xl px-4 py-3">{feedbackError}</div>
-            )}
+            {feedbackLoading && <div className="text-sm text-muted-foreground text-center py-8 animate-pulse">Loading feedback...</div>}
+            {feedbackError && <div className="text-sm text-destructive bg-red-50 border border-red-200 rounded-xl px-4 py-3">{feedbackError}</div>}
             {!feedbackLoading && feedbackLoaded && feedback.length === 0 && (
-              <div className="text-center py-12 text-muted-foreground">
-                <p className="text-sm">No feedback yet.</p>
-              </div>
+              <div className="text-center py-12 text-muted-foreground"><p className="text-sm">No feedback yet.</p></div>
             )}
             {feedback.map((entry) => (
-              <div key={entry.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <div key={entry.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
                 <p className="text-sm text-foreground leading-relaxed mb-3">{entry.message}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground font-medium">
-                    {entry.name ? entry.name : 'Anonymous'}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(entry.timestamp).toLocaleString()}
-                  </span>
+                  <span className="text-xs text-muted-foreground font-medium">{entry.name ? entry.name : 'Anonymous'}</span>
+                  <span className="text-xs text-muted-foreground">{new Date(entry.timestamp).toLocaleString()}</span>
                 </div>
               </div>
             ))}
