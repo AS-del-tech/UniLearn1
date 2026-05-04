@@ -7,28 +7,22 @@
       "inputType": "none"
     },
     {
-      "id": "timer",
-      "name": "Pomodoro Timer",
+      "id": "flashcard-deck",
+      "name": "Flashcard Deck",
       "type": "utility",
       "inputType": "none"
-    },
-    {
-      "id": "ai-summarize",
-      "name": "AI Summarizer",
-      "type": "ai",
-      "inputType": "text"
-    },
-    {
-      "id": "ai-flashcards",
-      "name": "AI Flashcards",
-      "type": "ai",
-      "inputType": "text"
     },
     {
       "id": "youtube",
       "name": "YouTube Embed",
       "type": "embed",
       "inputType": "url"
+    },
+    {
+      "id": "canva",
+      "name": "Canva",
+      "type": "utility",
+      "inputType": "none"
     },
     {
       "id": "feedback",
